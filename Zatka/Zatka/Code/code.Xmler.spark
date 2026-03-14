@@ -1,0 +1,379 @@
+﻿
+
+	namespace cac "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" //cac
+	namespace cbc "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+	namespace ext  "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2"
+	
+	//new
+	namespace ds	"http://www.w3.org/2000/09/xmldsig#"
+	namespace sig "urn:oasis:names:specification:ubl:schema:xsd:CommonSignatureComponents-2"
+	namespace sac "urn:oasis:names:specification:ubl:schema:xsd:SignatureAggregateComponents-2"
+	namespace sbc "urn:oasis:names:specification:ubl:schema:xsd:SignatureBasicComponents-2"
+	namespace xades "http://uri.etsi.org/01903/v1.3.2#"
+	
+	
+	
+	tag Invoice namespace "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
+	{
+		list UBLExtensions prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2"
+		{
+			item UBLExtension
+		}
+		
+		element ProfileID prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+		complex  ID prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+		//complex  ID prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+		element UUID prefix   "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+		element IssueDate prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+		//element ActualDeliveryDate prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+		element IssueTime prefix   "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+		complex InvoiceTypeCode prefix   "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+		element DocumentCurrencyCode prefix   "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+		
+		element TaxCurrencyCode  prefix   "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+		
+		
+		complexes AdditionalDocumentReference  prefix   "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+		complex AccountingSupplierParty prefix   "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+		complex AccountingCustomerParty prefix   "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+		complex Delivery prefix   "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+		
+		complexes TaxTotal prefix   "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+		complex LegalMonetaryTotal prefix   "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+		
+		
+		complex Note  prefix   "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+		complexes BillingReference  prefix    "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" 
+		
+	
+		complex SignatureCAC:Signature prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+		
+		complex PaymentMeans prefix   "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+		complex AllowanceCharge prefix   "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+		
+		complexes InvoiceLine  prefix   "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+
+	}
+	tag BillingReference namespace  "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" //cac
+	{
+		complex InvoiceDocumentReference prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" //cac
+	}
+	tag InvoiceDocumentReference namespace "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" //cac
+	{
+		complex ID			prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+	}
+	tag Delivery namespace "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+	{
+		element ActualDeliveryDate prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+		element LatestDeliveryDate prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+	}
+	
+	tag ID
+	{
+		attribute schemeID
+		attribute schemeAgencyID
+	}
+	tag InvoiceLine
+	{
+		complex ID			prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+		complex InvoicedQuantity	prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+		complex LineExtensionAmount prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+		complex TaxTotal
+		complex Item
+		complex Price
+	}
+	tag Price
+	{
+		complex PriceAmount prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+		complex AllowanceCharge
+	}
+
+	
+	tag PriceAmount
+	{ 
+		attribute currencyID
+	}
+	
+	tag Item
+	{
+		element Name prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+		complex ClassifiedTaxCategory
+	}
+
+	tag ClassifiedTaxCategory
+	{
+		complex ID	prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+		element Percent prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+		complex TaxScheme
+	}
+	
+	tag TaxTotal
+	{
+		attribute currencyID
+		complex TaxAmount		prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+		complex RoundingAmount	prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+		complex TaxSubtotal
+	}
+	tag TaxSubtotal
+	{
+		complex TaxableAmount  prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+		complex TaxAmount  prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+		complex TaxCategory
+	}
+	tag TaxableAmount {attribute currencyID}
+
+	tag TaxAmount    { attribute currencyID}
+	tag RoundingAmount     { attribute currencyID}
+	
+	tag InvoicedQuantity { attribute unitCode }
+	//tag LineExtensionAmount   { attribute currencyID}
+	
+	tag LegalMonetaryTotal
+	{
+		complex LineExtensionAmount 	prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+		complex TaxExclusiveAmount	prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+		complex TaxInclusiveAmount	prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+		complex AllowanceTotalAmount	prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+		complex PrepaidAmount	prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+		complex PayableAmount	prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+	}
+	
+	tag LineExtensionAmount  { attribute currencyID}
+	tag TaxExclusiveAmount   { attribute currencyID}
+	tag TaxInclusiveAmount   { attribute currencyID}
+	tag AllowanceTotalAmount  { attribute currencyID}
+	tag PrepaidAmount   { attribute currencyID}
+	tag PayableAmount   { attribute currencyID}
+
+
+	
+	tag AllowanceCharge
+	{
+		element ChargeIndicator prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+		element AllowanceChargeReason prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+		complex Amount prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+		complexes TaxCategory
+	}
+	
+	tag Amount 
+	{
+		attribute currencyID
+	}
+	
+	tag TaxCategory
+	{
+		complex ID		prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+		element Percent	 	prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+		complex TaxScheme
+	}
+
+	tag PaymentMeans
+	{
+		attribute Repeat
+		element PaymentMeansCode prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+		element InstructionNote prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+	}
+	
+	tag AccountingSupplierParty
+	{
+		complex Party prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" //cac
+	}
+	
+	tag AccountingCustomerParty
+	{
+		complex Party prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" //cac
+	}
+	
+	tag Party
+	{
+		complex PartyIdentification prefix   "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" //cac
+		complex PostalAddress prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" //cac
+		complex PartyTaxScheme prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" //cac
+		complex PartyLegalEntity prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" //cac
+	}
+	
+	tag PartyIdentification 
+	{
+		complex ID prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" 
+
+	}
+	
+	//tag ID { attribute schemeID }
+	
+	tag PostalAddress
+	{
+		element StreetName prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+		element BuildingNumber prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+		element CitySubdivisionName prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+		element CityName prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+		element PostalZone prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+		complex Country prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" //cac
+	}
+	tag Country
+	{
+		complex ID 			prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+		element  IdentificationCode	prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+	}
+	
+	tag PartyTaxScheme
+	{
+		element CompanyID  prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc
+		complex TaxScheme prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" //cac
+	}
+	
+	tag TaxScheme { complex ID prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" }
+	tag PartyLegalEntity 
+	{
+		element RegistrationName prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" //cbc 
+	}
+	
+	tag SignatureCAC:Signature {
+		complex ID prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" 
+		element SignatureMethod  prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+	}
+	
+	tag InvoiceTypeCode {attribute name}
+	tag Note {attribute languageID }
+	
+	tag AdditionalDocumentReference
+	{
+		complex ID prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+		element UUID    prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+		complex Attachment prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+	}
+	
+	tag Attachment
+	{
+		complex EmbeddedDocumentBinaryObject prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+	}
+	
+	tag EmbeddedDocumentBinaryObject 
+	{
+		attribute mimeCode
+		
+	}
+	
+	tag UBLExtension namespace "ext"
+	{
+		element ExtensionURI prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2"
+		complex ExtensionContent prefix  "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2"
+	}
+	tag ExtensionContent  namespace  "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2"
+	{
+		
+		
+		
+		
+		
+		list UBLDocumentSignatures  prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonSignatureComponents-2"
+		{
+			item SignatureInformation prefix "urn:oasis:names:specification:ubl:schema:xsd:SignatureAggregateComponents-2"
+		}
+	}
+	
+	tag SignatureInformation namespace "urn:oasis:names:specification:ubl:schema:xsd:SignatureAggregateComponents-2"
+	{
+		complex ID prefix "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" 
+		element ReferencedSignatureID prefix "urn:oasis:names:specification:ubl:schema:xsd:SignatureBasicComponents-2"
+		complex Signature  prefix "http://www.w3.org/2000/09/xmldsig#"
+	}
+	
+	tag Signature namespace  "http://www.w3.org/2000/09/xmldsig#"
+	{
+		attribute Id
+		list SignedInfo prefix "http://www.w3.org/2000/09/xmldsig#"
+		{
+			item CanonicalizationMethod
+			item SignatureMethod
+			item Reference
+		}
+		element SignatureValue
+		complex KeyInfo
+		complex ObjectItem:Object
+	}
+	tag CanonicalizationMethod namespace "http://www.w3.org/2000/09/xmldsig#" { attribute Algorithm}
+	tag SignatureMethod namespace "http://www.w3.org/2000/09/xmldsig#" { attribute Algorithm}
+	tag Reference namespace "http://www.w3.org/2000/09/xmldsig#" 
+	{
+		attribute Id
+		attribute URI
+		attribute Type
+		list Transforms  prefix "http://www.w3.org/2000/09/xmldsig#"
+		{
+			item Transform 
+		}
+		complex DigestMethod // prefix ds
+		element DigestValue  //prefix ds
+		
+	}
+	
+	tag Transform  namespace "http://www.w3.org/2000/09/xmldsig#"
+	{
+		attribute Algorithm
+		complex XPath   prefix "http://www.w3.org/2000/09/xmldsig#"
+	}
+	tag XPath   namespace "http://www.w3.org/2000/09/xmldsig#"  
+	{
+	
+	}
+	tag DigestMethod   namespace "http://www.w3.org/2000/09/xmldsig#"  {attribute Algorithm}
+	
+	tag KeyInfo  namespace "http://www.w3.org/2000/09/xmldsig#"   {complex X509Data  //prefix ds
+	}
+	tag X509Data  namespace "http://www.w3.org/2000/09/xmldsig#"  { complex X509Certificate  //prefix ds
+	}
+	tag X509Certificate   namespace "http://www.w3.org/2000/09/xmldsig#" {}
+	
+	
+
+	
+	
+	
+	
+	tag ObjectItem : Object
+	{
+		complex QualifyingProperties prefix "http://uri.etsi.org/01903/v1.3.2#"
+	}
+	tag QualifyingProperties namespace "http://uri.etsi.org/01903/v1.3.2#"
+	{
+		attribute Target
+		complex SignedProperties
+	}
+	
+	tag SignedProperties
+	{
+		attribute Id
+		list SignedSignatureProperties 
+		{
+			item SigningTime
+			item SigningCertificate
+		}
+	}
+	tag SigningTime {}
+	tag SigningCertificate
+	{
+		complex Cert
+	}
+	tag Cert
+	{
+		complex CertDigest
+		complex IssuerSerial
+	}
+	
+	tag CertDigest
+	{
+		complex DigestMethod prefix "http://www.w3.org/2000/09/xmldsig#" //ds
+		element DigestValue prefix "http://www.w3.org/2000/09/xmldsig#" //ds
+	}
+	
+	tag IssuerSerial namespace "http://uri.etsi.org/01903/v1.3.2#"
+	{
+		complex X509IssuerName prefix "http://www.w3.org/2000/09/xmldsig#"
+		complex X509SerialNumber prefix "http://www.w3.org/2000/09/xmldsig#"
+	}
+	tag X509IssuerName  namespace "http://www.w3.org/2000/09/xmldsig#" {}
+	tag X509SerialNumber namespace "http://www.w3.org/2000/09/xmldsig#" {}
+	
+	
+	
+	

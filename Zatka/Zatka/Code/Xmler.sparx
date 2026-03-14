@@ -1,0 +1,196 @@
+﻿
+
+	language(1.0)  Xmler  "Xmler"  by  "medmrt@gmail.com"  on  "2024/09/25"  
+	{  
+		//InitialTemplateDef
+		
+		template
+		{
+
+			"	//Hello"
+		}
+		
+		//Rules
+		rule  XmlerProject  "App Items"
+		{ 
+			opt def Namespaces(NamespaceDec)[] desc "Namespaces"
+			def Tags(Tag) []  desc  "Tag definition list"
+		} 
+		
+		rule NamespaceDec "Namespace declaration"
+		{
+			"namespace"
+			key desc "Tag Name"
+			string Value desc "Value"
+		}
+		
+		
+		rule TagNamespace "Tag Namespace Declaration"
+		{
+			"namespace"
+			string Name desc "Name"
+		}
+		
+		rule Tag "XML tag definition"
+		{
+			"tag"
+			key desc "Tag Name"
+			opt def TypeDefintion(TypeDefintion) desc "Type defintion"
+			opt def TagNamespace(TagNamespace) desc "Tag Namespace Declaration"
+			opt def DefaultValue(DefaultValue) desc "DefaultValue"
+			"{"
+			opt def Body(Attribute,Element,Complex,Complexes,List) []  desc  "Body items definition list"
+			"}"
+		}
+		
+
+		
+		rule TypeDefintion "XML name"
+		{
+			":"
+			key desc "Tag Name"
+		}
+		
+		rule DefaultValue "Default Value"
+		{
+			"def"
+			string Value desc "Value"
+		}
+		rule Attribute "Attribute"
+		{
+			"attribute"
+			key desc "Attribute Name"
+			opt def DefaultValue(DefaultValue) desc "DefaultValue"
+		}
+		
+		rule Element "Simple Element with no attributes or sub elements"
+		{
+			"element"
+			key desc "Element Name"
+			opt def Prefix(Prefix) desc "Prefix"
+			opt def DefaultValue(DefaultValue) desc "DefaultValue"
+		}
+		
+		
+		rule Complex "Complex Element with attributes or sub elements"
+		{
+			"complex"
+			key desc "Element Name"
+			opt def TypeDefintion(TypeDefintion) desc "Type defintion"
+			opt def Prefix(Prefix) desc "Prefix"
+			
+		}
+		
+		rule Complexes "Complex Element with attributes or sub elements"
+		{
+			"complexes"
+			key desc "Element Name"
+			opt def Prefix(Prefix) desc "Prefix"
+		}
+		
+		rule List "List of items"
+		{
+			"list"
+			key desc "Element Name"
+			opt def Prefix(Prefix) desc "Prefix"
+			"{"
+			def Items(Item) []  desc  "Item definition list"
+			"}"
+		}
+		
+		rule Item "List item"
+		{
+			"item"
+			key desc "Element Name"
+			opt def Prefix(Prefix) desc "Prefix"
+		}
+		
+
+		
+		rule Prefix "Prefix"
+		{
+			"prefix"
+			string Name desc "Name"
+		}
+		
+		
+		
+		compile XmlerCompiler to "Xmler.cs"
+		{
+		    "using System.IO;"
+		    "using System.Xml;"
+		    "using System.Xml.Serialization;"
+		    "using System.Collections.Generic;"
+		    
+		    "namespace Xmler"
+		    "{"
+		    "{{#each Tags}}"
+		    "    {{#if @first}}"
+		    "    public static class Utilities"
+		    "    {"
+		    "        public static {{Name}} DeSerialize(string filePath)"
+		    "        {"
+		    "            var ser = new XmlSerializer(typeof({{Name}}));"
+		    "            using (var x = XmlReader.Create(filePath))"
+		    "            {"
+		    "                return ({{Name}})ser.Deserialize(x);"
+		    "            }"
+		    "        }"
+		    
+		    "        public static void Serialize({{Name}} obj, string filePath)"
+		    "        {"
+		    "            var serializer = new XmlSerializer(typeof({{Name}}));"
+		    "            var ns = new XmlSerializerNamespaces();"
+		    "            {{#each ../Namespaces}}"
+		    "            ns.Add(\"{{Name}}\", \"{{Value}}\");"
+		    "            {{/each}}"
+		    "            using (var sw = new StreamWriter(filePath))"
+		    "            {"
+		    "                serializer.Serialize(sw, obj, ns);"
+		    "            }"
+		    "        }"
+		    "    }"
+		    "    {{/if}}"
+
+		    "    [{{#if @first}}XmlRoot{{else}}XmlType{{/if}}(\"{{#if TypeDefintion}}{{TypeDefintion.Name}}{{else}}{{Name}}{{/if}}\"{{#if TagNamespace}}, Namespace = \"{{TagNamespace.Name}}\"{{/if}})]"
+		    "    public class {{Name}}"
+		    "    {"
+		    "        [XmlText]"
+		    "        public string Text { get; set; } = {{#if DefaultValue}}\"{{DefaultValue.Value}}\"{{else}}null{{/if}};"
+		    
+		    "{{#each Body}}"
+		    "    {{#if Attribute}}"
+		    "        [XmlAttribute]"
+		    "        public string {{Name}} { get; set; } = {{#if DefaultValue}}\"{{DefaultValue.Value}}\"{{else}}null{{/if}};"
+		    "        public bool ShouldSerialize{{Name}}() => !string.IsNullOrEmpty({{Name}});"
+		    "    {{/if}}"
+		    
+		    "    {{#if Element}}"
+		    "        [XmlElement({{#if Prefix}}Namespace = \"{{Prefix.Name}}\"{{/if}})]"
+		    "        public string {{Name}} { get; set; } = {{#if DefaultValue}}\"{{DefaultValue.Value}}\"{{else}}null{{/if}};"
+		    "    {{/if}}"
+		    
+		    "    {{#if List}}"
+		    "        [XmlArray({{#if Prefix}}Namespace = \"{{Prefix.Name}}\"{{/if}})]"
+		    "        {{#each Items}}[XmlArrayItem(typeof({{Name}}){{#if Prefix}}, Namespace = \"{{Prefix.Name}}\"{{/if}})]{{/each}}"
+		    "        public List<object> {{Name}} { get; set; } = null;//new List<object>();"
+		    "    {{/if}}"
+		    
+		    "    {{#if Complex}}"
+		    "        [XmlElement(\"{{#if TypeDefintion}}{{TypeDefintion.Name}}{{else}}{{Name}}{{/if}}\"{{#if Prefix}}, Namespace = \"{{Prefix.Name}}\"{{/if}})]"
+		    "        public {{Name}} {{Name}} { get; set; }"
+		    "    {{/if}}"
+		    
+		    "    {{#if Complexes}}"
+		    "        [XmlElement(\"{{Name}}\" {{#if Prefix}}, Namespace = \"{{Prefix.Name}}\"{{/if}})]"
+		    "        public List<{{Name}}> {{Name}} { get; set; } = null;//new List<{{Name}}>();"
+		    "    {{/if}}"
+		    "{{/each}}"
+		    "    }"
+		    "{{/each}}"
+		    "}"
+		}
+		
+
+
+	}  
